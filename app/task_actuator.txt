@@ -1,0 +1,61 @@
+  task_actuator.c (task_actuator.h, task_actuator_attribute.h) 
+   Non-Blocking & Update By Time Code -> Actuator Modeling
+   
+//task_actuator_attribute.h
+
+En primer lugar define los distintos eventos de módulo actuador en un enumerativo declarado 
+como task_actuator_ev y define el tipo task_actuator_ev_t. Seguido define los distintos 
+estados del módulo en un enumerativo task_actuator_st y define el tipo task_actuator_st_t. 
+Luego define otro enumerativo con los diferentes IDs de los actuadores poniéndoles el tipo 
+task_actuator_id_t.
+
+Define la estructura task_actuator_cfg_t que contiene el ID, el puerto, el pin, el estado de 
+prendido, el estado de apagado (como prender y apagar el actuador), un timer de parpadeo y un 
+delay de pulso para el actuador. Luego define la estructura task_actuator_dta_t que almacena 
+el estado actual y el último evento del actuador así como un tick y un flag en forma de bool.
+
+Por último declara la variable externa task_actuator_dta_list, un array de largo indefinido 
+del tipo task_actuator_dta_t.
+
+
+//task_actuator.c
+
+En primer lugar define los valores iniciales para los contadores, los valores de los timers de 
+pulso y parpadeo y el valor mínimo del delay del actuador.
+
+Luego define un array, task_actuator_cfg_list, del tipo task_actuator_cfg_t que contiene la 
+configuración de cada actuador, seguido se define ACTUATOR_CFG_QTY como el largo de dicho array.
+Después se define otro array, task_actuator_dta_list esta vez del tipo task_actuator_dta_t 
+con los datos iniciales de cada actuador, y ACTUATOR_DTA_QTY como el largo de este último.
+
+Se declaran las variables externas g_task_actuator_cnt, el contador de vueltas, y 
+g_task_actuator_tick_cnt, el contador de ticks.
+
+Se define la función void task_actuator_init(void *parameters) que: imprime que la tarea está 
+inicializada y una descripción de la misma; inicializa el contador g_task_actuator_cnt e 
+imprime su valor inicial; imprime el estado, el evento y el flag inicial de cada actuador, así 
+como los inicializa apagados; inicializa el contador g_task_actuator_tick_cnt.
+
+Se define la función void task_actuator_update(void *parameters). En primer lugar dicha función 
+define la variable booleana interna b_time_update_required como false y aumenta en 1 el 
+contador g_task_actuator_cnt. Luego deshabilita las interrupciones y mediante un if se fija si 
+el valor del contador g_task_actuator_tick_cnt es mayor a su valor inicial, en tal caso de ser 
+verdad esto último disminuye en 1 dicho contador, pone a b_time_update_required como true y, 
+saliendo del if, habilita las interrupciones de vuelta. Siguiendo se entra en un while, en 
+tanto b_time_update_required sea true, dentro del cual lo primero que se hace es: deshabilitar 
+las interrupciones; poner un bloque if, igual al último mencionado, seguido de un else en el 
+cual se setea a b_time_update_required como false; se activan las interrupciones de vuelta. 
+Dentro del while todavía, seguido se llega a un for que realiza los cambios de estado de cada 
+actuador mediante un switch.
+
+
+
+  task_actuator_interface.c (task_actuator_interface.h)
+   Non-Blocking Code
+   
+Se define una única función, 
+void put_event_task_actuator(task_actuator_ev_t event, task_actuator_id_t identifier), 
+que agarre el elemento en la posición identifier de task_actuator_dta_list y le cambia su 
+último evento por event y establece su flag en true.
+
+...
