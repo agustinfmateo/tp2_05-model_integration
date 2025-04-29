@@ -151,10 +151,7 @@ void task_system_update(void *parameters)
 			p_task_system_dta->flag = true;
 			p_task_system_dta->event = get_event_task_system();
 		}
-		////
-		//LOGGER_LOG(" %s = %d\r\n", GET_NAME(p_task_system_dta->state), p_task_system_dta->state);
-		//LOGGER_LOG(" %s = %d\r\n", GET_NAME(p_task_system_dta->event), p_task_system_dta->event);
-		///
+
 		switch (p_task_system_dta->state)
 		{
 			case ST_SYS_XX_STBY:

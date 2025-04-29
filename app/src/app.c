@@ -152,13 +152,7 @@ void app_update(void)
 			{
 				task_dta_list[index].WCET = cycle_counter_time_us;
 			}
-			//BORRRAR
-			//
-			//
-			//LOGGER_LOG(" %s = %lu\r\n", GET_NAME(task_dta_list[index].WCET), task_dta_list[index].WCET); //Imprimir el WCET por cada ciclo
-			//
-			//
-			/////////
+
 	    }
     }
 }
