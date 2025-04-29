@@ -152,8 +152,8 @@ void task_system_update(void *parameters)
 			p_task_system_dta->event = get_event_task_system();
 		}
 		////
-		//LOGGER_LOG(" %s = %lu\r\n", GET_NAME(p_task_system_dta->state), p_task_system_dta->state);
-		//LOGGER_LOG(" %s = %lu\r\n", GET_NAME(p_task_system_dta->event), p_task_system_dta->event);
+		//LOGGER_LOG(" %s = %d\r\n", GET_NAME(p_task_system_dta->state), p_task_system_dta->state);
+		//LOGGER_LOG(" %s = %d\r\n", GET_NAME(p_task_system_dta->event), p_task_system_dta->event);
 		///
 		switch (p_task_system_dta->state)
 		{
@@ -188,6 +188,8 @@ void task_system_update(void *parameters)
 				{
 					p_task_system_dta->flag = false;
 					put_event_task_actuator(EV_LED_XX_OPEN, ID_LED_G);
+					put_event_task_actuator(EV_LED_XX_OPEN, ID_LED_R);
+					put_event_task_actuator(EV_LED_XX_OPEN, ID_LED_Y);
 					p_task_system_dta->state = ST_SYS_XX_ACTIVATE;
 				}
 				else if((true == p_task_system_dta->flag) && (EV_SYS_INF_UP == p_task_system_dta->event))
@@ -213,7 +215,9 @@ void task_system_update(void *parameters)
 				else if((true == p_task_system_dta->flag) && (EV_SYS_INF_UP == p_task_system_dta->event))
 				{
 					p_task_system_dta->flag = false;
+					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_G);
 					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_R);
+					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_Y);
 					p_task_system_dta->state = ST_SYS_XX_ARRIVE;
 				}
 				break;
@@ -233,7 +237,9 @@ void task_system_update(void *parameters)
 				if ((true == p_task_system_dta->flag) && (EV_SYS_INF_UP == p_task_system_dta->event))
 				{
 					p_task_system_dta->flag = false;
+					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_G);
 					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_R);
+					put_event_task_actuator(EV_LED_XX_CLOSE, ID_LED_Y);
 					p_task_system_dta->state = ST_SYS_XX_STBY;
 				}
 
